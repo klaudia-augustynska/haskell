@@ -1,5 +1,5 @@
 import Options.Applicative
-import Data.Maybe (fromJust, isJust)
+import Data.Maybe (fromMaybe)
 
 data Argumenty = Argumenty
   { nazwaPliku :: String
@@ -22,13 +22,11 @@ argumenty = Argumenty
 
 przechwycArgumenty :: Argumenty -> IO ()
 przechwycArgumenty (Argumenty nazwaPliku maybeX maybeY) =
-  do
-    case maybeX of
-      Just n -> putStrLn "mamy x"
-      Nothing -> putStrLn "nie mamy x"
-    case maybeY of
-      Just n -> putStrLn "mamy y"
-      Nothing -> putStrLn "nie mamy y"
+  let 
+    x = fromMaybe 0 maybeX
+    y = fromMaybe 0 maybeY
+  in
+    print (x*y)
 
 main :: IO ()
 main = execParser opts >>= przechwycArgumenty
