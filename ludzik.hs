@@ -1,5 +1,6 @@
 import Options.Applicative
 import Data.Maybe (fromMaybe)
+import Text.ParserCombinators.Parsec
 
 data Argumenty = Argumenty
   { nazwaPliku :: String
@@ -9,16 +10,16 @@ data Argumenty = Argumenty
 data Komenda = Kolko Float Float Float
              | Kreska Float Float Float Float
 
-argumenty :: Parser Argumenty
+argumenty :: Options.Applicative.Parser Argumenty
 argumenty = Argumenty
   <$> argument str 
     (  metavar "nazwaPliku"
     <> help "Plik z komendami do rysowania ludzika" )
-  <*> optional 
+  <*> Options.Applicative.optional 
     ( argument auto
       (  metavar "x"
       <> help "Ilość pikseli od lewej w pliku wynikowym" ))
-  <*> optional 
+  <*> Options.Applicative.optional 
     ( argument auto
       (  metavar "y"
       <> help "Ilość pikseli od góry w pliku wynikowym" ))
