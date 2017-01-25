@@ -1,18 +1,10 @@
--- file: repstring.hs
 import Options.Applicative
 import Data.Maybe (fromJust, isJust)
--- import Data.Monoid ((<>))
 
 data Argumenty = Argumenty
   { nazwaPliku :: String
   , x :: Maybe Int
   , y :: Maybe Int }
-
--- replicateString :: Sample -> IO ()
--- replicateString (Sample string n) = 
---     do 
---       if not True then putStrLn repstring else putStrLn $ reverse repstring
---           where repstring = foldr (++) "" $ replicate n string
 
 argumenty :: Parser Argumenty
 argumenty = Argumenty
@@ -29,7 +21,14 @@ argumenty = Argumenty
       <> help "Ilość pikseli od góry w pliku wynikowym" ))
 
 przechwycArgumenty :: Argumenty -> IO ()
-przechwycArgumenty (Argumenty nazwaPliku maybeX maybeY)   = putStrLn nazwaPliku
+przechwycArgumenty (Argumenty nazwaPliku maybeX maybeY) =
+  do
+    case maybeX of
+      Just n -> putStrLn "mamy x"
+      Nothing -> putStrLn "nie mamy x"
+    case maybeY of
+      Just n -> putStrLn "mamy y"
+      Nothing -> putStrLn "nie mamy y"
 
 main :: IO ()
 main = execParser opts >>= przechwycArgumenty
