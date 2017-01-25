@@ -6,6 +6,9 @@ data Argumenty = Argumenty
   , x :: Maybe Int
   , y :: Maybe Int }
 
+data Komenda = Kolko Float Float Float
+             | Kreska Float Float Float Float
+
 argumenty :: Parser Argumenty
 argumenty = Argumenty
   <$> argument str 
@@ -25,8 +28,12 @@ przechwycArgumenty (Argumenty nazwaPliku maybeX maybeY) =
   let 
     x = fromMaybe 0 maybeX
     y = fromMaybe 0 maybeY
+    komendy = parsujPlik nazwaPliku
   in
     print (x*y)
+
+parsujPlik :: String -> [Komenda]
+parsujPlik _ = [Kolko 50 100 30]
 
 main :: IO ()
 main = execParser opts >>= przechwycArgumenty
