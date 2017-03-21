@@ -2,6 +2,7 @@ import Options.Applicative
 import Data.Maybe (fromMaybe)
 import ParserLudzika
 import KomendaRysowania
+import GenerujSvg
 
 data Argumenty = Argumenty
   { plik :: String
@@ -31,9 +32,10 @@ przechwycArgumenty Argumenty {plik = nazwaPliku, x = maybeX, y = maybeY} =
     do
       tresc <- readFile nazwaPliku
       let Right listaKomend = uzyjParseca tresc
-      -- writeFile "wynik.txt" (dupa ++ "\n")
+      generujSvg listaKomend x y
+      --writeFile "wynik.txt" (dupa ++ "\n")
       -- appendFile "asdf" dupa
-      print listaKomend
+      --print listaKomend
 
 main :: IO ()
 main = execParser opts >>= przechwycArgumenty

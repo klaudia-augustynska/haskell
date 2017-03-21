@@ -1,2 +1,6 @@
-Kolko 50 100 30
-Kreska 50 100 100 200
+Kolko 45 35 30
+Kreska 45 65 45 160
+Kreska 5 130 45 75
+Kreska 45 75 85 130
+Kreska 5 250 45 160
+Kreska 45 160 90 250
