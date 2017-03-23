@@ -21,7 +21,21 @@ pw = do
     spaces
     return (Prawo (read kat))
 
-file = many1 (try np <|> try pw)
+pz :: Parser Komenda
+pz = do
+    spaces
+    string "pż"
+    spaces
+    return Pokaz
+
+sz :: Parser Komenda
+sz = do
+    spaces
+    string "sż"
+    spaces
+    return Schowaj
+
+file = many1 (try np <|> try pw <|> try pz <|> try sz)
 
 parsujPlik :: String -> Either ParseError [Komenda]
 parsujPlik tresc = parse file "nieistotne dopoki nie ma bledu" tresc

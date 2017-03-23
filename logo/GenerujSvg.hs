@@ -16,6 +16,7 @@ poczatkoweWspolrzedne = (250,250)
 
 generujSvg :: [Komenda] -> String -> IO ()
 generujSvg lista plik = writeFile (plik ++ ".html") $ ((svgNaglowek 0 20) ++ (svgSrodek lista) ++ svgStopka)
+--generujSvg lista plik = print $ lista
 
 svgNaglowek :: Int -> Int -> String
 svgNaglowek x y = "<!doctype html> \n\
@@ -40,10 +41,14 @@ interpretacjaKomend kat czyPodniesiony wspolrzedne (Naprzod ile:resztaKomend) = 
     ++ interpretacjaKomend kat czyPodniesiony (noweWspolrzedne wspolrzedne ile kat) resztaKomend
 interpretacjaKomend kat czyPodniesiony wspolrzedne (Prawo nowyKat:resztaKomend) = 
     interpretacjaKomend ((kat + nowyKat) `mod` 360) czyPodniesiony wspolrzedne resztaKomend
-interpretacjaKomend _ _ _ _ = ""
+interpretacjaKomend kat czyPodniesiony wspolrzedne (Pokaz:resztaKomend) = 
+    interpretacjaKomend kat True wspolrzedne resztaKomend
+interpretacjaKomend kat czyPodniesiony wspolrzedne (Schowaj:resztaKomend) =
+    interpretacjaKomend kat False wspolrzedne resztaKomend
+interpretacjaKomend _ _ _ [] = ""
 
 noweWspolrzedne :: Wspolrzedne -> Int -> Kat -> Wspolrzedne
-noweWspolrzedne (x,y) ile kat = (x + ( round $ sin (radiany kat) * (fromIntegral ile)), y + (round $ cos (radiany kat) * (fromIntegral ile)))
+noweWspolrzedne (x,y) ile kat = (x + ( round $ sin (radiany kat) * (fromIntegral ile)), y - (round $ cos (radiany kat) * (fromIntegral ile)))
 
 radiany :: Kat -> Float
 radiany stopnie = fromIntegral stopnie * pi / 180
