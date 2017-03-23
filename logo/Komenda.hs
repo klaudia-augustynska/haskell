@@ -9,4 +9,6 @@ data Komenda = Naprzod Int
              | Czysc
              | BedzieCzyszczenie
              | KoniecCzyszczenia
+             | UstawKolorPisaka Int
+             | UstawGruboscPisaka Int
              deriving Show

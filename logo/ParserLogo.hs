@@ -60,7 +60,25 @@ cs = do
     spaces
     return Czysc
 
-file = many1 (try np <|> try ws <|> try pw <|> try lw <|> try opu <|> try pod <|> try cs)
+ukp :: Parser Komenda
+ukp = do
+    spaces
+    string "ukp"
+    spaces
+    nrKoloru <- many1 digit
+    spaces
+    return (UstawKolorPisaka (read nrKoloru))
+
+ugp :: Parser Komenda
+ugp = do
+    spaces
+    string "ugp"
+    spaces
+    grubosc <- many1 digit
+    spaces
+    return (UstawGruboscPisaka (read grubosc))
+
+file = many1 (try np <|> try ws <|> try pw <|> try lw <|> try opu <|> try pod <|> try cs <|> try ukp <|> try ugp)
 
 parsujPlik :: String -> Either ParseError [Komenda]
 parsujPlik tresc = parse file "nieistotne dopoki nie ma bledu" tresc

@@ -18,6 +18,12 @@ poczatkowyCzyJuzCzyscimy = False
 poczatkoweWspolrzedne :: Wspolrzedne
 poczatkoweWspolrzedne = (250,250)
 
+poczatkowyKolor :: Int
+poczatkowyKolor = 0
+
+poczatkowaGrubosc :: Int
+poczatkowaGrubosc = 4
+
 generujSvg :: [Komenda] -> String -> IO ()
 generujSvg lista plik = writeFile (plik ++ ".html") $ ((svgNaglowek 0 20) ++ (svgSrodek lista) ++ svgStopka)
 --generujSvg lista plik = print $ obslugaCzysc lista
@@ -30,7 +36,7 @@ svgNaglowek x y = "<!doctype html> \n\
     \       <svg style=\"width:500px;height:500px;margin:auto;display:block;background:#fff\">\n"
 
 svgSrodek :: [Komenda] -> String
-svgSrodek lista = interpretacjaKomend poczatkowyKat poczatkowyPodniesiony poczatkowyCzyJuzCzyscimy poczatkoweWspolrzedne (obslugaCzysc lista)
+svgSrodek lista = interpretacjaKomend poczatkowyKat poczatkowyPodniesiony poczatkowyCzyJuzCzyscimy poczatkoweWspolrzedne poczatkowyKolor poczatkowaGrubosc (obslugaCzysc lista)
 
 svgStopka :: String
 svgStopka = "           Sorry, your browser does not support inline SVG.\n\
@@ -48,28 +54,54 @@ obslugaCzysc' [] True = [BedzieCzyszczenie]
 obslugaCzysc' [] False = []
 obslugaCzysc' (a:ax) czyJuzCzyscimy = a : (obslugaCzysc' ax czyJuzCzyscimy)
 
-interpretacjaKomend :: Kat -> Podniesiony -> CzyJuzCzyscimy -> Wspolrzedne -> [Komenda] -> String
-interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Naprzod ile:resztaKomend) = 
+interpretacjaKomend :: Kat -> Podniesiony -> CzyJuzCzyscimy -> Wspolrzedne -> Int -> Int -> [Komenda] -> String
+interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne kolor grubosc (Naprzod ile:resztaKomend) = 
     (if czyPodniesiony == False && czyCzyscimy == False   
-        then rysujLinie wspolrzedne (noweWspolrzedne wspolrzedne ile kat)
+        then 
+            let kolor' = kodKoloruNaNazwe kolor 
+            in rysujLinie wspolrzedne (noweWspolrzedne wspolrzedne ile kat) kolor' grubosc
         else "") 
-    ++ interpretacjaKomend kat czyPodniesiony czyCzyscimy (noweWspolrzedne wspolrzedne ile kat) resztaKomend
-interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Wstecz ile:resztaKomend) = 
+    ++ interpretacjaKomend kat czyPodniesiony czyCzyscimy (noweWspolrzedne wspolrzedne ile kat) kolor grubosc resztaKomend
+interpretacjaKomend a b c d e f (Wstecz ile:resztaKomend) = 
     let x = -ile in 
-        interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne ((Naprzod x) : resztaKomend)
-interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Prawo nowyKat:resztaKomend) = 
-    interpretacjaKomend ((kat + nowyKat) `mod` 360) czyPodniesiony czyCzyscimy wspolrzedne resztaKomend
-interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Lewo nowyKat:resztaKomend) = 
-    interpretacjaKomend ((kat - nowyKat) `mod` 360) czyPodniesiony czyCzyscimy wspolrzedne resztaKomend
-interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Opusc:resztaKomend) = 
-    interpretacjaKomend kat False czyCzyscimy wspolrzedne resztaKomend
-interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Podnies:resztaKomend) =
-    interpretacjaKomend kat True czyCzyscimy wspolrzedne resztaKomend
-interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (BedzieCzyszczenie:resztaKomend) = 
-    interpretacjaKomend kat czyPodniesiony True wspolrzedne resztaKomend
-interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (KoniecCzyszczenia:resztaKomend) = 
-    interpretacjaKomend kat czyPodniesiony False wspolrzedne resztaKomend
-interpretacjaKomend _ _ _ _ [] = ""
+        interpretacjaKomend a b c d e f ((Naprzod x) : resztaKomend)
+interpretacjaKomend kat b c d e f (Prawo nowyKat:resztaKomend) = 
+    interpretacjaKomend ((kat + nowyKat) `mod` 360) b c d e f resztaKomend
+interpretacjaKomend kat b c d e f (Lewo nowyKat:resztaKomend) = 
+    interpretacjaKomend ((kat - nowyKat) `mod` 360) b c d e f resztaKomend
+interpretacjaKomend a czyPodniesiony c d e f (Opusc:resztaKomend) = 
+    interpretacjaKomend a False c d e f resztaKomend
+interpretacjaKomend a czyPodniesiony c d e f (Podnies:resztaKomend) =
+    interpretacjaKomend a True c d e f resztaKomend
+interpretacjaKomend a b czyCzyscimy d e f (BedzieCzyszczenie:resztaKomend) = 
+    interpretacjaKomend a b True d e f resztaKomend
+interpretacjaKomend a b czyCzyscimy d e f (KoniecCzyszczenia:resztaKomend) = 
+    interpretacjaKomend a b False d e f resztaKomend
+interpretacjaKomend a b c d _ f (UstawKolorPisaka nrKoloru:resztaKomend) = 
+    interpretacjaKomend a b c d nrKoloru f resztaKomend
+interpretacjaKomend a b c d e _ (UstawGruboscPisaka grubosc:resztaKomend) =
+    interpretacjaKomend a b c d e grubosc resztaKomend
+interpretacjaKomend _ _ _ _ _ _ [] = ""
+
+kodKoloruNaNazwe :: Int -> String
+kodKoloruNaNazwe k = case k of 
+    0 -> "#000000"
+    1 -> "#000080"
+    2 -> "#008000"
+    3 -> "#008080"
+    4 -> "#800000"
+    5 -> "#800080"
+    6 -> "#808000"
+    7 -> "#C0C0FF"
+    8 -> "#808080"
+    9 -> "#0000FF"
+    10 -> "#00FF00"
+    11 -> "#00FFFF"
+    12 -> "#FF0000"
+    13 -> "#FF00FF"
+    14 -> "#FFFF00"
+    15 -> "#FFFFFF"
+    _ -> "#000000"
 
 noweWspolrzedne :: Wspolrzedne -> Int -> Kat -> Wspolrzedne
 noweWspolrzedne (x,y) ile kat = (x + ( round $ sin (radiany kat) * (fromIntegral ile)), y - (round $ cos (radiany kat) * (fromIntegral ile)))
@@ -77,9 +109,11 @@ noweWspolrzedne (x,y) ile kat = (x + ( round $ sin (radiany kat) * (fromIntegral
 radiany :: Kat -> Float
 radiany stopnie = fromIntegral stopnie * pi / 180
 
-rysujLinie :: (Int,Int) -> (Int,Int) -> String
-rysujLinie (x1,y1) (x2,y2) = "         <line x1=\"" ++ (show x1) 
+rysujLinie :: (Int,Int) -> (Int,Int) -> String -> Int -> String
+rysujLinie (x1,y1) (x2,y2) kolor grubosc = "         <line x1=\"" ++ (show x1) 
     ++ "\" y1=\"" ++ (show y1) 
     ++ "\" x2=\"" ++ (show x2)
     ++ "\" y2=\"" ++ (show y2)
-    ++ "\" stroke=\"black\" stroke-width=\"4\" />\n" 
+    ++ "\" stroke=\"" ++ kolor
+    ++ "\" stroke-width=\"" ++ (show grubosc)
+    ++ "\" />\n" 

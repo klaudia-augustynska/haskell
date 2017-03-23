@@ -2,9 +2,12 @@ np 50
 pod
 np 50
 opu
+ukp 6
 np 50
 lw 66
+ukp 5
 np 100
 pw 99
+ugp 6
 np 20
 ws 200
