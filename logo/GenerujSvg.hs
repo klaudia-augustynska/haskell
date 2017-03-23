@@ -56,6 +56,8 @@ interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Naprzod ile:resz
     ++ interpretacjaKomend kat czyPodniesiony czyCzyscimy (noweWspolrzedne wspolrzedne ile kat) resztaKomend
 interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Prawo nowyKat:resztaKomend) = 
     interpretacjaKomend ((kat + nowyKat) `mod` 360) czyPodniesiony czyCzyscimy wspolrzedne resztaKomend
+interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Lewo nowyKat:resztaKomend) = 
+    interpretacjaKomend ((kat - nowyKat) `mod` 360) czyPodniesiony czyCzyscimy wspolrzedne resztaKomend
 interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Opusc:resztaKomend) = 
     interpretacjaKomend kat False czyCzyscimy wspolrzedne resztaKomend
 interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Podnies:resztaKomend) =
