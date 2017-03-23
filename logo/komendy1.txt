@@ -1,4 +1,7 @@
 np 100 pw 90
+cs
 np 100 pw 90
+pod
 np 100 pw 90
+opu
 np 100 pw 90 
