@@ -35,7 +35,14 @@ pod = do
     spaces
     return Podnies
 
-file = many1 (try np <|> try pw <|> try opu <|> try pod)
+cs :: Parser Komenda
+cs = do
+    spaces
+    string "cs"
+    spaces
+    return Czysc
+
+file = many1 (try np <|> try pw <|> try opu <|> try pod <|> try cs)
 
 parsujPlik :: String -> Either ParseError [Komenda]
 parsujPlik tresc = parse file "nieistotne dopoki nie ma bledu" tresc
