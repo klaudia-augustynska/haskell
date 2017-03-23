@@ -69,13 +69,13 @@ interpretacjaKomend kat b c d e f (Prawo nowyKat:resztaKomend) =
     interpretacjaKomend ((kat + nowyKat) `mod` 360) b c d e f resztaKomend
 interpretacjaKomend kat b c d e f (Lewo nowyKat:resztaKomend) = 
     interpretacjaKomend ((kat - nowyKat) `mod` 360) b c d e f resztaKomend
-interpretacjaKomend a czyPodniesiony c d e f (Opusc:resztaKomend) = 
+interpretacjaKomend a _ c d e f (Opusc:resztaKomend) = 
     interpretacjaKomend a False c d e f resztaKomend
-interpretacjaKomend a czyPodniesiony c d e f (Podnies:resztaKomend) =
+interpretacjaKomend a _ c d e f (Podnies:resztaKomend) =
     interpretacjaKomend a True c d e f resztaKomend
-interpretacjaKomend a b czyCzyscimy d e f (BedzieCzyszczenie:resztaKomend) = 
+interpretacjaKomend a b _ d e f (BedzieCzyszczenie:resztaKomend) = 
     interpretacjaKomend a b True d e f resztaKomend
-interpretacjaKomend a b czyCzyscimy d e f (KoniecCzyszczenia:resztaKomend) = 
+interpretacjaKomend a b _ d e f (KoniecCzyszczenia:resztaKomend) = 
     interpretacjaKomend a b False d e f resztaKomend
 interpretacjaKomend a b c d _ f (UstawKolorPisaka nrKoloru:resztaKomend) = 
     interpretacjaKomend a b c d nrKoloru f resztaKomend
