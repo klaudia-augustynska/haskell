@@ -41,9 +41,9 @@ interpretacjaKomend kat czyPodniesiony wspolrzedne (Naprzod ile:resztaKomend) = 
     ++ interpretacjaKomend kat czyPodniesiony (noweWspolrzedne wspolrzedne ile kat) resztaKomend
 interpretacjaKomend kat czyPodniesiony wspolrzedne (Prawo nowyKat:resztaKomend) = 
     interpretacjaKomend ((kat + nowyKat) `mod` 360) czyPodniesiony wspolrzedne resztaKomend
-interpretacjaKomend kat czyPodniesiony wspolrzedne (Pokaz:resztaKomend) = 
+interpretacjaKomend kat czyPodniesiony wspolrzedne (Opusc:resztaKomend) = 
     interpretacjaKomend kat True wspolrzedne resztaKomend
-interpretacjaKomend kat czyPodniesiony wspolrzedne (Schowaj:resztaKomend) =
+interpretacjaKomend kat czyPodniesiony wspolrzedne (Podnies:resztaKomend) =
     interpretacjaKomend kat False wspolrzedne resztaKomend
 interpretacjaKomend _ _ _ [] = ""
 

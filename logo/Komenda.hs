@@ -2,6 +2,6 @@ module Komenda where
 
 data Komenda = Naprzod Int
              | Prawo Int 
-             | Pokaz
-             | Schowaj
+             | Opusc
+             | Podnies
              deriving Show

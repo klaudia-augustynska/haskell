@@ -1,6 +1,6 @@
 np 100 pw 90
-sż
+pod
 np 100 pw 90
-pż
+opu
 np 100 pw 90
 np 100 pw 90 

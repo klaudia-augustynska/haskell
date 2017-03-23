@@ -21,21 +21,21 @@ pw = do
     spaces
     return (Prawo (read kat))
 
-pz :: Parser Komenda
-pz = do
+opu :: Parser Komenda
+opu = do
     spaces
-    string "pż"
+    string "opu"
     spaces
-    return Pokaz
+    return Opusc
 
-sz :: Parser Komenda
-sz = do
+pod :: Parser Komenda
+pod = do
     spaces
-    string "sż"
+    string "pod"
     spaces
-    return Schowaj
+    return Podnies
 
-file = many1 (try np <|> try pw <|> try pz <|> try sz)
+file = many1 (try np <|> try pw <|> try opu <|> try pod)
 
 parsujPlik :: String -> Either ParseError [Komenda]
 parsujPlik tresc = parse file "nieistotne dopoki nie ma bledu" tresc
