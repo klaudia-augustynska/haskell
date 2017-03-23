@@ -1,4 +1,6 @@
 import Options.Applicative
+import ParserLogo
+import GenerujSvg
 
 data Argumenty = Argumenty
   { input :: String
@@ -8,7 +10,7 @@ argumenty :: Parser Argumenty
 argumenty = Argumenty
   <$> argument str 
     (  metavar "input"
-    <> help "Plik z komendami do rysowania ludzika" )
+    <> help "Plik z komendami Logo" )
   <*> optional 
     ( argument str
       (  metavar "output"
@@ -17,10 +19,13 @@ argumenty = Argumenty
 przechwycArgumenty :: Argumenty -> IO ()
 przechwycArgumenty Argumenty {input = inputFile, output = maybeOutput} =
     do
-        print inputFile
-        case maybeOutput of 
-            Just x -> print x 
-            Nothing -> print "dupa"
+        tresc <- readFile inputFile
+        let Right listaKomend = parsujPlik tresc
+        generujSvg listaKomend (outputFile maybeOutput)
+
+outputFile :: Maybe String -> String
+outputFile (Just x) = x
+outputFile Nothing = "wynik"
 
 main :: IO ()
 main = execParser opts >>= przechwycArgumenty
