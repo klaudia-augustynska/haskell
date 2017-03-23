@@ -54,6 +54,9 @@ interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Naprzod ile:resz
         then rysujLinie wspolrzedne (noweWspolrzedne wspolrzedne ile kat)
         else "") 
     ++ interpretacjaKomend kat czyPodniesiony czyCzyscimy (noweWspolrzedne wspolrzedne ile kat) resztaKomend
+interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Wstecz ile:resztaKomend) = 
+    let x = -ile in 
+        interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne ((Naprzod x) : resztaKomend)
 interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Prawo nowyKat:resztaKomend) = 
     interpretacjaKomend ((kat + nowyKat) `mod` 360) czyPodniesiony czyCzyscimy wspolrzedne resztaKomend
 interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne (Lewo nowyKat:resztaKomend) = 

@@ -12,6 +12,15 @@ np = do
     spaces
     return (Naprzod (read ile))
 
+ws :: Parser Komenda
+ws = do
+    spaces
+    string "ws"
+    spaces
+    ile <- many1 digit
+    spaces
+    return (Wstecz (read ile))
+
 pw :: Parser Komenda
 pw = do
     spaces
@@ -51,7 +60,7 @@ cs = do
     spaces
     return Czysc
 
-file = many1 (try np <|> try pw <|> try lw <|> try opu <|> try pod <|> try cs)
+file = many1 (try np <|> try ws <|> try pw <|> try lw <|> try opu <|> try pod <|> try cs)
 
 parsujPlik :: String -> Either ParseError [Komenda]
 parsujPlik tresc = parse file "nieistotne dopoki nie ma bledu" tresc

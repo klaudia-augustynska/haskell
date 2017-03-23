@@ -1,6 +1,7 @@
 module Komenda where 
 
 data Komenda = Naprzod Int
+             | Wstecz Int
              | Prawo Int 
              | Lewo Int
              | Opusc
