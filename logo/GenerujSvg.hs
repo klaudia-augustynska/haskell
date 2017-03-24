@@ -55,6 +55,7 @@ obslugaCzysc' [] False = []
 obslugaCzysc' (a:ax) czyJuzCzyscimy = a : (obslugaCzysc' ax czyJuzCzyscimy)
 
 interpretacjaKomend :: Kat -> Podniesiony -> CzyJuzCzyscimy -> Wspolrzedne -> Int -> Int -> [Komenda] -> String
+-- Naprzód, Wstecz
 interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne kolor grubosc (Naprzod ile:resztaKomend) = 
     (if czyPodniesiony == False && czyCzyscimy == False   
         then 
@@ -65,23 +66,42 @@ interpretacjaKomend kat czyPodniesiony czyCzyscimy wspolrzedne kolor grubosc (Na
 interpretacjaKomend a b c d e f (Wstecz ile:resztaKomend) = 
     let x = -ile in 
         interpretacjaKomend a b c d e f ((Naprzod x) : resztaKomend)
+-- Prawo, Lewo
 interpretacjaKomend kat b c d e f (Prawo nowyKat:resztaKomend) = 
     interpretacjaKomend ((kat + nowyKat) `mod` 360) b c d e f resztaKomend
 interpretacjaKomend kat b c d e f (Lewo nowyKat:resztaKomend) = 
     interpretacjaKomend ((kat - nowyKat) `mod` 360) b c d e f resztaKomend
+-- Opuść, Podnieś
 interpretacjaKomend a _ c d e f (Opusc:resztaKomend) = 
     interpretacjaKomend a False c d e f resztaKomend
 interpretacjaKomend a _ c d e f (Podnies:resztaKomend) =
     interpretacjaKomend a True c d e f resztaKomend
+-- Czyść
 interpretacjaKomend a b _ d e f (BedzieCzyszczenie:resztaKomend) = 
     interpretacjaKomend a b True d e f resztaKomend
 interpretacjaKomend a b _ d e f (KoniecCzyszczenia:resztaKomend) = 
     interpretacjaKomend a b False d e f resztaKomend
+-- Kolor, Grubość
 interpretacjaKomend a b c d _ f (UstawKolorPisaka nrKoloru:resztaKomend) = 
     interpretacjaKomend a b c d nrKoloru f resztaKomend
 interpretacjaKomend a b c d e _ (UstawGruboscPisaka grubosc:resztaKomend) =
     interpretacjaKomend a b c d e grubosc resztaKomend
+-- Powtórz
+interpretacjaKomend a b c d e f (Powtorz 0 _:resztaKomend) =
+    interpretacjaKomend a b c d e f resztaKomend
+interpretacjaKomend a b c d e f (Powtorz ile lista:resztaKomend) = 
+    interpretacjaKomend a b c d e f (lista ++ [Powtorz (ile-1) lista] ++ resztaKomend)
 interpretacjaKomend _ _ _ _ _ _ [] = ""
+
+-- interpretacjaPowtorz a b c d e f 0 _ _ resztaKomend =
+--     interpretacjaKomend a b c d e f resztaKomend
+-- interpretacjaPowtorz a b c d e f _ _ [] resztaKomend = 
+--     interpretacjaKomend a b c d e f resztaKomend
+-- interpretacjaPowtorz a b c d e f ile [] lista resztaKomend = 
+--     interpretacjaPowtorz a b c d e f (ile-1) lista lista resztaKomend
+-- interpretacjaPowtorz a b c d e f ile (s:sx) lista resztaKomend = 
+--     interpretacjaKomend a b c d e f [s]
+--     ++ interpretacjaPowtorz a b c d e f ile sx lista resztaKomend
 
 kodKoloruNaNazwe :: Int -> String
 kodKoloruNaNazwe k = case k of 

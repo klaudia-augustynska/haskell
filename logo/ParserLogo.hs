@@ -78,7 +78,20 @@ ugp = do
     spaces
     return (UstawGruboscPisaka (read grubosc))
 
-file = many1 (try np <|> try ws <|> try pw <|> try lw <|> try opu <|> try pod <|> try cs <|> try ukp <|> try ugp)
+powtorz :: Parser Komenda
+powtorz = do
+    spaces
+    string "powtórz"
+    spaces
+    ile <- many1 digit
+    spaces
+    char '['
+    lista <- file
+    char ']'
+    spaces
+    return (Powtorz (read ile) lista)
+
+file = many1 (try np <|> try ws <|> try pw <|> try lw <|> try opu <|> try pod <|> try cs <|> try ukp <|> try ugp <|> try powtorz)
 
 parsujPlik :: String -> Either ParseError [Komenda]
 parsujPlik tresc = parse file "nieistotne dopoki nie ma bledu" tresc

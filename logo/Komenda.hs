@@ -11,4 +11,5 @@ data Komenda = Naprzod Int
              | KoniecCzyszczenia
              | UstawKolorPisaka Int
              | UstawGruboscPisaka Int
+             | Powtorz Int [Komenda]
              deriving Show
