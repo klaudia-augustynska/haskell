@@ -93,16 +93,6 @@ interpretacjaKomend a b c d e f (Powtorz ile lista:resztaKomend) =
     interpretacjaKomend a b c d e f (lista ++ [Powtorz (ile-1) lista] ++ resztaKomend)
 interpretacjaKomend _ _ _ _ _ _ [] = ""
 
--- interpretacjaPowtorz a b c d e f 0 _ _ resztaKomend =
---     interpretacjaKomend a b c d e f resztaKomend
--- interpretacjaPowtorz a b c d e f _ _ [] resztaKomend = 
---     interpretacjaKomend a b c d e f resztaKomend
--- interpretacjaPowtorz a b c d e f ile [] lista resztaKomend = 
---     interpretacjaPowtorz a b c d e f (ile-1) lista lista resztaKomend
--- interpretacjaPowtorz a b c d e f ile (s:sx) lista resztaKomend = 
---     interpretacjaKomend a b c d e f [s]
---     ++ interpretacjaPowtorz a b c d e f ile sx lista resztaKomend
-
 kodKoloruNaNazwe :: Int -> String
 kodKoloruNaNazwe k = case k of 
     0 -> "#000000"
