@@ -1,15 +1,17 @@
 module Komenda where 
 
-data Komenda = Naprzod Int
-             | Wstecz Int
-             | Prawo Int 
-             | Lewo Int
+data Komenda = Naprzod String
+             | Wstecz String
+             | Prawo String 
+             | Lewo String
              | Opusc
              | Podnies
              | Czysc
              | BedzieCzyszczenie
              | KoniecCzyszczenia
-             | UstawKolorPisaka Int
-             | UstawGruboscPisaka Int
-             | Powtorz Int [Komenda]
+             | UstawKolorPisaka String
+             | UstawGruboscPisaka String
+             | Powtorz String [Komenda]
+             | Procedura String [String] [Komenda]
+             | WywolanieProcedury String [String]
              deriving Show

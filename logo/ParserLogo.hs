@@ -8,36 +8,36 @@ np = do
     spaces
     string "np"
     spaces
-    ile <- many1 digit
+    ile <- (many1 digit) <|> argument
     spaces
-    return (Naprzod (read ile))
+    return (Naprzod ile)
 
 ws :: Parser Komenda
 ws = do
     spaces
     string "ws"
     spaces
-    ile <- many1 digit
+    ile <- (many1 digit) <|> argument
     spaces
-    return (Wstecz (read ile))
+    return (Wstecz ile)
 
 pw :: Parser Komenda
 pw = do
     spaces
     string "pw"
     spaces
-    kat <- many1 digit
+    kat <- (many1 digit) <|> argument
     spaces
-    return (Prawo (read kat))
+    return (Prawo kat)
 
 lw :: Parser Komenda
 lw = do
     spaces
     string "lw"
     spaces
-    kat <- many1 digit
+    kat <- (many1 digit) <|> argument
     spaces
-    return (Lewo (read kat))
+    return (Lewo kat)
 
 opu :: Parser Komenda
 opu = do
@@ -65,33 +65,83 @@ ukp = do
     spaces
     string "ukp"
     spaces
-    nrKoloru <- many1 digit
+    nrKoloru <- many1 digit <|> argument
     spaces
-    return (UstawKolorPisaka (read nrKoloru))
+    return (UstawKolorPisaka nrKoloru)
 
 ugp :: Parser Komenda
 ugp = do
     spaces
     string "ugp"
     spaces
-    grubosc <- many1 digit
+    grubosc <- many1 digit <|> argument
     spaces
-    return (UstawGruboscPisaka (read grubosc))
+    return (UstawGruboscPisaka grubosc)
 
 powtorz :: Parser Komenda
 powtorz = do
     spaces
     string "powtórz"
     spaces
-    ile <- many1 digit
+    ile <- many1 digit <|> argument
     spaces
     char '['
-    lista <- file
+    lista <- many (tryEverything)
     char ']'
     spaces
-    return (Powtorz (read ile) lista)
+    return (Powtorz ile lista)
 
-file = many1 (try np <|> try ws <|> try pw <|> try lw <|> try opu <|> try pod <|> try cs <|> try ukp <|> try ugp <|> try powtorz)
+argument :: Parser String
+argument = do
+    spaces
+    char ':'
+    nazwa <- many1 letter
+    spaces
+    return nazwa
+
+procedura :: Parser Komenda
+procedura = do
+    spaces
+    string "oto"
+    spaces
+    nazwa <- many1 letter
+    spaces
+    argumenty <- many (try argument)
+    spaces
+    komendy <- many1 (tryEverything)
+    spaces
+    string "już"
+    spaces
+    return (Procedura nazwa argumenty komendy)
+
+liczbaAlboNazwa :: Parser String
+liczbaAlboNazwa = do
+    spaces
+    wartosc <- (many1 digit) <|> (many1 letter)
+    spaces
+    return wartosc
+
+listaSlowKluczowych :: [String]
+listaSlowKluczowych = ["np","ws","pw","lw","opu","pod","cs","ukp","ugp","powtórz","oto","już"]
+
+-- sprawdzanie jest na samym końcu gdy już i tak nie pasuje żadna komenda
+wywolanieProcedury :: Parser Komenda
+wywolanieProcedury = do
+    spaces
+    nazwa <- many1 letter
+    spaces
+    argumenty <- manyTill liczbaAlboNazwa $
+        foldl (<|>) (try $ lookAhead $ eof >> (string "")) (map (try . lookAhead . string) listaSlowKluczowych)
+    spaces
+    return (WywolanieProcedury nazwa argumenty)
+
+listaDostepnychKomend :: [Parser Komenda]
+listaDostepnychKomend = [np,ws,pw,lw,opu,pod,cs,ukp,ugp,powtorz]
+
+tryEverything :: Parser Komenda
+tryEverything = foldl (<|>) (try np) (map try listaDostepnychKomend)
+
+file = many1 (tryEverything <|> try procedura <|> try wywolanieProcedury)
 
 parsujPlik :: String -> Either ParseError [Komenda]
 parsujPlik tresc = parse file "nieistotne dopoki nie ma bledu" tresc

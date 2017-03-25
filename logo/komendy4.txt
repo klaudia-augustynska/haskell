@@ -1,0 +1,17 @@
+oto trojkat :bok
+powtórz 3 [np :bok pw 120]
+już
+trojkat 50
+ukp 6
+oto figura :ilosc :dlugosc :kat 
+powtórz :ilosc [np :dlugosc pw :kat]
+już
+pod
+np 100
+opu
+figura 6 50 60 
+pod pw 200 np 100 ukp 3 np 150 pw 120 opu
+oto costam :a :b
+powtórz :a [ ukp 9 np 5 powtórz :b [ ukp 10 np 10 pw 90 np 10 lw 90 ] ]
+już
+costam 7 3
